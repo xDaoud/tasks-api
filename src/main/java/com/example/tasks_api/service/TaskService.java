@@ -1,21 +1,18 @@
 package com.example.tasks_api.service;
 
 import com.example.tasks_api.model.Task;
+import com.example.tasks_api.repository.TaskRepository;
 
 import java.util.*;
 
 public class TaskService {
-    private List<Task> taskList;
-    private int autoId;
-
+    TaskRepository taskRepository = new TaskRepository();
     public TaskService() {
 
-        taskList = new ArrayList<>();
-        this.autoId = 1;
     }
 
     public List<Task> getTaskList() {
-        return new ArrayList<>(taskList);
+        return taskRepository.getTaskList();
     }
 
     public Task addTask(Task task) {
