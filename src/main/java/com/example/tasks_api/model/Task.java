@@ -1,6 +1,7 @@
 package com.example.tasks_api.model;
 
 public class Task {
+    private int id;
     private String  taskName;
     private Boolean isCompleted;
     public Task(String taskName) {
@@ -22,5 +23,13 @@ public class Task {
 
     public void setTaskName(String taskName) {
         this.taskName = taskName;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

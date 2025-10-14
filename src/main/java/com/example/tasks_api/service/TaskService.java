@@ -6,9 +6,12 @@ import java.util.*;
 
 public class TaskService {
     private List<Task> taskList;
+    private int autoId;
 
     public TaskService() {
+
         taskList = new ArrayList<>();
+        this.autoId = 1;
     }
 
     public List<Task> getTaskList() {
@@ -18,6 +21,7 @@ public class TaskService {
     public Task addTask(Task task) {
         Task task1 = new Task(task.getTaskName());
         task1.setCompleted(task.getCompleted());
+        task1.setId(this.autoId++);
         taskList.add(task1);
         return task1;
     }
