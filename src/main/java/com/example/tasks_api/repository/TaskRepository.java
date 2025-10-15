@@ -1,42 +1,25 @@
 package com.example.tasks_api.repository;
 
 import com.example.tasks_api.model.Task;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
-class SQLConnection {
-    Connection connection;
-    SQLConnection() throws SQLException {
-        String connStr = "jdbc:postgresql:tasks?user=myuser&password=mypassword";
-        try
-        {
-            connection = DriverManager.getConnection(connStr);
-            PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXIST task(task_id SERIAL NOT NULL PRIMARY KEY, task_name VARCHAR(255)) NOT NULL UNIQUE, is_completed BOOLEAN NOT NULL");
-            stmt.executeUpdate();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println("a problem in making SQL connection " + e.getMessage());;
-        } finally {
-            connection.close();
-        }
-    }
-}
+@Repository
 public class TaskRepository {
-    private List<Task> taskList;
-    private int autoId;
-    SQLConnection sqlConnection;
+    private final List<Task> taskList;
+    @Autowired
+    private DataSource dataSource;
     public TaskRepository() {
         taskList = new ArrayList<>();
-        try {
-            sqlConnection = new SQLConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
+
     public List<Task> getTaskList() {
-        try{
-            PreparedStatement stmt = sqlConnection.connection.prepareStatement("SELECT * FROM task");
+        try(Connection connection = dataSource.getConnection()){
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM task");
             ResultSet resultSet = stmt.executeQuery();
             while(resultSet.next()) {
                 this.taskList.add(new Task(resultSet.getNString(2)));
@@ -46,8 +29,26 @@ public class TaskRepository {
             throw new RuntimeException(e);
         }
     }
-
-
+    public Task addTask(Task task) {
+        try(Connection connection = dataSource.getConnection()){
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO task(task_name, is_completed) VALUES (?,?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            Task task1 = new Task(task.getTaskName());
+            task1.setCompleted(task.getCompleted());
+            stmt.setString(1, task1.getTaskName());
+            stmt.setBoolean(2, task1.getCompleted());
+            ResultSet generatedKey = stmt.getGeneratedKeys();
+            while(generatedKey.next()){
+                task1.setId(generatedKey.getInt(1));
+            }
+            stmt.executeUpdate();
+            return task1;
+        } catch (SQLException e){
+            System.out.println("an error making SQL connection: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
 }
 //all data stuff should be here (S in solid)
 //and service should depend on this one, inject it there (DI)
