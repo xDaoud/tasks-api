@@ -31,17 +31,15 @@ public class TaskController {
     }
 
     @PutMapping("/Task/{id}")
-    public String updateTask(@PathVariable int id, @RequestBody Task task) {
-        Optional<Task> first = this.taskService.getTaskList().stream().
-                filter(a -> a.getId() == id)
-                .findFirst();
-        return "Updated Task: " + task.getTaskName();
+    public String updateTask(@PathVariable int id, @RequestBody Task updatedTask) {
+        Task result = taskService.updateTask(id, updatedTask);
+        return "Updated Task: " + updatedTask.getTaskName();
 
     }
 
     @DeleteMapping("/Task/{id}")
     public String deleteTask(@PathVariable int id) {
-        this.taskService.getTaskList().removeIf(a -> a.getId() == id);
+        Task result = taskService.deleteTask(id);
         return "Deleted Task ID: " + id;
     }
 

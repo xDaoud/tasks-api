@@ -22,10 +22,11 @@ public class TaskRepository {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM task");
             ResultSet resultSet = stmt.executeQuery();
             while(resultSet.next()) {
-                this.taskList.add(new Task(resultSet.getNString(2)));
+                this.taskList.add(new Task(resultSet.getString(2)));
             }
             return new ArrayList<>(taskList);
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -46,6 +47,48 @@ public class TaskRepository {
         } catch (SQLException e){
             System.out.println("an error making SQL connection: " + e.getMessage());
             e.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
+
+    public Task updateTask(int id, Task task) {
+        try(Connection connection = dataSource.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement("UPDATE task\n" +
+                    "SET task_name = (?)\n" +
+                    ", is_completed = (?)\n" +
+                    "WHERE task_id = (?);\n");
+            Task task1 = new Task(task.getTaskName());
+            task1.setId(id);
+            task1.setCompleted(task.getCompleted());
+            stmt.setString(1, task1.getTaskName());
+            stmt.setBoolean(2, task1.getCompleted());
+            stmt.setInt(3, id);
+            stmt.executeUpdate();
+            return task1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("error in sql: " + e.getMessage());
+            throw new RuntimeException();
+        }
+    }
+
+    public Task deleteTask(int id) {
+        try(Connection connection = dataSource.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM task WHERE task_id = (?)", Statement.RETURN_GENERATED_KEYS);
+            stmt.setInt(1, id);
+            ResultSet generatedKey = stmt.getGeneratedKeys();
+            stmt.executeUpdate();
+            while(generatedKey.next()){
+                Task task = new Task(generatedKey.getString(2));
+                task.setId(generatedKey.getInt(1));
+                task.setCompleted(generatedKey.getBoolean(3));
+                stmt.executeUpdate();
+                return task;
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("error in sql: " + e.getMessage());
             throw new RuntimeException();
         }
     }

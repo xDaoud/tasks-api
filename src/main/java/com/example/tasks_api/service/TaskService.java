@@ -22,4 +22,12 @@ public class TaskService {
     public Task addTask(Task task) {
         return taskRepository.addTask(task);
     }
+
+    public Task updateTask(int id, Task task) {
+        return taskRepository.updateTask(id, task);
+    }
+
+    public Task deleteTask(int id) {
+        return taskRepository.deleteTask(id);
+    }
 }
