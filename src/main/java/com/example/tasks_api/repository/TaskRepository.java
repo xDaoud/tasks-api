@@ -19,7 +19,7 @@ public class TaskRepository {
 
     public List<Task> getTaskList() {
         try(Connection connection = dataSource.getConnection()){
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM task");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM tasks");
             ResultSet resultSet = stmt.executeQuery();
             while(resultSet.next()) {
                 this.taskList.add(new Task(resultSet.getString(2)));
@@ -32,8 +32,7 @@ public class TaskRepository {
     }
     public Task addTask(Task task) {
         try(Connection connection = dataSource.getConnection()){
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO task(task_name, is_completed) VALUES (?,?)",
-                    Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO tasks(task_name, is_completed) VALUES (?,?)");
             Task task1 = new Task(task.getTaskName());
             task1.setCompleted(task.getCompleted());
             stmt.setString(1, task1.getTaskName());
@@ -47,16 +46,13 @@ public class TaskRepository {
         } catch (SQLException e){
             System.out.println("an error making SQL connection: " + e.getMessage());
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
     public Task updateTask(int id, Task task) {
         try(Connection connection = dataSource.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement("UPDATE task\n" +
-                    "SET task_name = (?)\n" +
-                    ", is_completed = (?)\n" +
-                    "WHERE task_id = (?);\n");
+            PreparedStatement stmt = connection.prepareStatement("UPDATE tasks SET task_name = (?) , is_completed = (?) WHERE task_id = (?);");
             Task task1 = new Task(task.getTaskName());
             task1.setId(id);
             task1.setCompleted(task.getCompleted());
@@ -68,13 +64,13 @@ public class TaskRepository {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("error in sql: " + e.getMessage());
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
     public Task deleteTask(int id) {
         try(Connection connection = dataSource.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement("DELETE FROM task WHERE task_id = (?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM tasks WHERE task_id = (?)", Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, id);
             ResultSet generatedKey = stmt.getGeneratedKeys();
             stmt.executeUpdate();
@@ -89,7 +85,7 @@ public class TaskRepository {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("error in sql: " + e.getMessage());
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 }

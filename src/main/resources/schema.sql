@@ -1,10 +1,15 @@
-CREATE TABLE IF NOT EXISTS task(
+
+CREATE TABLE IF NOT EXISTS users(
+    user_id SERIAL PRIMARY KEY,
+    user_name VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS tasks(
     task_id SERIAL PRIMARY KEY,
     task_name VARCHAR(255) NOT NULL UNIQUE,
-    is_completed BOOLEAN NOT NULL DEFAULT false
+    is_completed BOOLEAN NOT NULL DEFAULT false,
+    user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE
 );
---CREATE TABLE task(
---    task_id SERIAL,
---    task_name VARCHAR(255),
---    is_completed BOOLEAN
---);
