@@ -94,4 +94,19 @@ public class UserRepository {
             throw new RuntimeException(e);
         }
     }
+
+    public List<User> getUserList() {
+        try(Connection connection = dataSource.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users");
+            ResultSet resultSet = stmt.executeQuery();
+            while(resultSet.next()) {
+                userList.add(new User(resultSet.getString("user_name"), resultSet.getString("email")));
+            }
+            return new ArrayList<>(userList);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQL error: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 }

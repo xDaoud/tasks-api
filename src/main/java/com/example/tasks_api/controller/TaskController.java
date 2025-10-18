@@ -14,10 +14,6 @@ import java.util.Optional;
 public class TaskController {
     @Autowired
     TaskService taskService;
-    @GetMapping("/Greetings")
-    public String Greetings(){
-        return "Hello world<br>Trying to learn Spring boot<br>To become employable";
-    }
 
     @GetMapping("/tasks")
     public List<Task> tasks() {
