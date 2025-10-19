@@ -32,11 +32,12 @@ public class TaskRepository {
     }
     public Task addTask(Task task) {
         try(Connection connection = dataSource.getConnection()){
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO tasks(task_name, is_completed) VALUES (?,?)");
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO tasks(task_name, is_completed, user_id) VALUES (?,?,?)");
             Task task1 = new Task(task.getTaskName());
             task1.setCompleted(task.getCompleted());
             stmt.setString(1, task1.getTaskName());
             stmt.setBoolean(2, task1.getCompleted());
+            stmt.setInt(3, task1.getUserId());
             ResultSet generatedKey = stmt.getGeneratedKeys();
             while(generatedKey.next()){
                 task1.setId(generatedKey.getInt(1));
@@ -52,13 +53,15 @@ public class TaskRepository {
 
     public Task updateTask(int id, Task task) {
         try(Connection connection = dataSource.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement("UPDATE tasks SET task_name = (?) , is_completed = (?) WHERE task_id = (?);");
+            PreparedStatement stmt = connection.prepareStatement("UPDATE tasks SET task_name = (?) , is_completed = (?) WHERE task_id = (?) AND user_id = (?);");
             Task task1 = new Task(task.getTaskName());
             task1.setId(id);
+            task1.setUserId(task.getUserId());
             task1.setCompleted(task.getCompleted());
             stmt.setString(1, task1.getTaskName());
             stmt.setBoolean(2, task1.getCompleted());
             stmt.setInt(3, id);
+            stmt.setInt(4, task1.getUserId());
             stmt.executeUpdate();
             return task1;
         } catch (SQLException e) {
@@ -68,10 +71,11 @@ public class TaskRepository {
         }
     }
 
-    public Task deleteTask(int id) {
+    public Task deleteTask(int id, int userId) {
         try(Connection connection = dataSource.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement("DELETE FROM tasks WHERE task_id = (?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM tasks WHERE task_id = (?) AND user_id = (?)", Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, id);
+            stmt.setInt(2, userId);
             ResultSet generatedKey = stmt.getGeneratedKeys();
             stmt.executeUpdate();
             while(generatedKey.next()){
@@ -89,5 +93,3 @@ public class TaskRepository {
         }
     }
 }
-//all data stuff should be here (S in solid)
-//and service should depend on this one, inject it there (DI)

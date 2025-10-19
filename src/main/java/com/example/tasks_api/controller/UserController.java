@@ -32,7 +32,7 @@ public class UserController {
 
     @DeleteMapping("/user/{id}")
     public String deleteUser(@PathVariable int id) {
-        User result = userService.deleteTask(id);
+        User result = userService.deleteUser(id);
         return "Deleted user: " + id;
     }
 }

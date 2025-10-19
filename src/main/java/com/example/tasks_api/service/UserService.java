@@ -21,7 +21,7 @@ public class UserService {
         return userRepository.updateUser(id, user);
     }
 
-    public User deleteTask(int id) {
+    public User deleteUser(int id) {
         return userRepository.deleteUser(id);
     }
 

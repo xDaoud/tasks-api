@@ -20,8 +20,8 @@ public class TaskController {
         return taskService.getTaskList();
     }
 
-    @PostMapping("/Task")
-    public ResponseEntity<Task> addTask(@RequestBody Task task) {
+    @PostMapping("/user/{userId}")
+    public ResponseEntity<Task> addTask(@PathVariable int userId, @RequestBody Task task) {
         Task task1 = this.taskService.addTask(task);
         return new ResponseEntity<>(task1, HttpStatus.CREATED);
     }
@@ -33,9 +33,9 @@ public class TaskController {
 
     }
 
-    @DeleteMapping("/Task/{id}")
-    public String deleteTask(@PathVariable int id) {
-        Task result = taskService.deleteTask(id);
+    @DeleteMapping("/Task/{id}/user/{userId}")
+    public String deleteTask(@PathVariable int id, @PathVariable int userId) {
+        Task result = taskService.deleteTask(id, userId);
         return "Deleted Task ID: " + id;
     }
 

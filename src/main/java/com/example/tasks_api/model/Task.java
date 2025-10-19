@@ -4,6 +4,7 @@ public class Task {
     private int id;
     private String  taskName;
     private Boolean isCompleted;
+    private int userId;
     public Task(String taskName) {
         this.taskName = taskName;
         this.isCompleted = false;
@@ -31,5 +32,13 @@ public class Task {
 
     public int getId() {
         return id;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 }
