@@ -12,8 +12,12 @@ import java.util.Optional;
 
 @RestController
 public class TaskController {
-    @Autowired
+    final
     TaskService taskService;
+
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @GetMapping("/tasks")
     public List<Task> tasks() {

@@ -14,10 +14,11 @@ import java.util.*;
 @Repository
 public class UserRepository {
     List<User> userList;
-    @Autowired
+    final
     DataSource dataSource;
-    public UserRepository() {
+    public UserRepository(DataSource dataSource) {
         userList = new ArrayList<>();
+        this.dataSource = dataSource;
     }
 
     public User addUser(User user) {

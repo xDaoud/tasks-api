@@ -10,12 +10,14 @@ import java.util.*;
 
 @Service
 public class TaskService {
-    @Autowired
+    final
     TaskRepository taskRepository;
-    @Autowired
+    final
     UserRepository userRepository;
-    public TaskService() {
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository) {
 
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Task> getTaskList() {

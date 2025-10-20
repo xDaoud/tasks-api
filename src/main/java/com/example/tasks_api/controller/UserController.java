@@ -12,8 +12,12 @@ import java.util.List;
 
 @Controller
 public class UserController {
-    @Autowired
+    final
     UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/users")
     public List<User> getUsers() {return userService.findAll();}

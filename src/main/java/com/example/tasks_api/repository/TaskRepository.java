@@ -10,10 +10,10 @@ import java.util.*;
 @Repository
 public class TaskRepository {
     private final List<Task> taskList;
-    @Autowired
-    private DataSource dataSource;
-    public TaskRepository() {
+    private final DataSource dataSource;
+    public TaskRepository(DataSource dataSource) {
         taskList = new ArrayList<>();
+        this.dataSource = dataSource;
     }
 
 
