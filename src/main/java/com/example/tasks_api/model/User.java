@@ -7,11 +7,15 @@ public class User {
     private String username;
     private String email;
     private LocalDateTime createdAt;
+    private String passwordHash;
+    private String role = "USER";
 
-    public User(String username, String email) {
+    public User(String username, String email, String passwordHash, String role) {
         this.createdAt = LocalDateTime.now();
         this.email = email;
         this.username = username;
+        this.passwordHash = passwordHash;
+        this.role = role;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -44,5 +48,20 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+    public String getRole() {
+        return role;
     }
 }

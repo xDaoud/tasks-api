@@ -19,13 +19,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/notnow")
     public List<User> getUsers() {return userService.findAll();}
 
-    @PostMapping("/user")
+    @PostMapping("/users")
     public ResponseEntity<User> addUser(@RequestBody User user) {
-        User user1 = userService.addUser(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        User addedUser = userService.addUser(user);
+        return new ResponseEntity<>(addedUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/user/{id}")
