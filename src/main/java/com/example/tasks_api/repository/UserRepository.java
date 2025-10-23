@@ -2,6 +2,7 @@ package com.example.tasks_api.repository;
 
 import com.example.tasks_api.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -23,11 +24,14 @@ public class UserRepository {
 
     public User addUser(User user) {
         try(Connection connection = dataSource.getConnection()) {
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO users(user_name, email) VALUES(?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            String hashedPassowrd = bCryptPasswordEncoder.encode(user.getPasswordHash());
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO users(user_name, email, password) VALUES(?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
-            User user1 = new User(user.getUsername(), user.getEmail());
+            User user1 = new User(user.getUsername(), user.getEmail(), user.getPasswordHash(), user.getRole());
             stmt.setString(1, user1.getUsername());
             stmt.setString(2, user.getEmail());
+            stmt.setString(3, hashedPassowrd);
             stmt.executeUpdate();
             ResultSet generatedKeys = stmt.getGeneratedKeys();
             while(generatedKeys.next()) {
@@ -46,7 +50,7 @@ public class UserRepository {
     public User updateUser(int id,User user) {
         try(Connection connection = dataSource.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement("UPDATE users SET user_name = (?) , email = (?) WHERE user_id = (?);");
-            User user1 = new User(user.getUsername(), user.getEmail());
+            User user1 = new User(user.getUsername(), user.getEmail(), user.getPasswordHash(), user.getRole());
             user1.setUserID(id);
             user1.setCreatedAt(user.getCreatedAt());
             stmt.setString(1, user.getUsername());
@@ -84,7 +88,7 @@ public class UserRepository {
             stmt.setInt(1, id);
             ResultSet resultSet = stmt.executeQuery();
             if(resultSet.next()) {
-                User user = new User(resultSet.getString("user_name"),resultSet.getString("email"));
+                User user = new User(resultSet.getString("user_name"),resultSet.getString("email"), resultSet.getString("password"), resultSet.getString("role"));
                 user.setUserID(resultSet.getInt("user_id"));
                 return user;
             }
@@ -101,7 +105,7 @@ public class UserRepository {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users");
             ResultSet resultSet = stmt.executeQuery();
             while(resultSet.next()) {
-                userList.add(new User(resultSet.getString("user_name"), resultSet.getString("email")));
+                userList.add(new User(resultSet.getString("user_name"), resultSet.getString("email"), resultSet.getString("password"), resultSet.getString("role")));
             }
             return new ArrayList<>(userList);
         } catch (SQLException e) {
