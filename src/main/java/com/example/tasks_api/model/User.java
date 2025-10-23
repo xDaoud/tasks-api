@@ -22,7 +22,7 @@ public class User {
         return createdAt;
     }
 
-    public int getUserID() {
+    public int getUserId() {
         return userID;
     }
 
@@ -38,7 +38,7 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public void setUserID(int userID) {
+    public void setUserId(int userID) {
         this.userID = userID;
     }
 

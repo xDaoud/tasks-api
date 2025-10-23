@@ -24,19 +24,17 @@ public class UserRepository {
 
     public User addUser(User user) {
         try(Connection connection = dataSource.getConnection()) {
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            String hashedPassowrd = bCryptPasswordEncoder.encode(user.getPasswordHash());
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO users(user_name, email, password) VALUES(?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
             User user1 = new User(user.getUsername(), user.getEmail(), user.getPasswordHash(), user.getRole());
             stmt.setString(1, user1.getUsername());
-            stmt.setString(2, user.getEmail());
-            stmt.setString(3, hashedPassowrd);
+            stmt.setString(2, user1.getEmail());
+            stmt.setString(3, user1.getPasswordHash());
             stmt.executeUpdate();
             ResultSet generatedKeys = stmt.getGeneratedKeys();
             while(generatedKeys.next()) {
                 int userId = generatedKeys.getInt("user_id");
-                user1.setUserID(userId);
+                user1.setUserId(userId);
             }
             return user1;
 
@@ -51,7 +49,7 @@ public class UserRepository {
         try(Connection connection = dataSource.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement("UPDATE users SET user_name = (?) , email = (?) WHERE user_id = (?);");
             User user1 = new User(user.getUsername(), user.getEmail(), user.getPasswordHash(), user.getRole());
-            user1.setUserID(id);
+            user1.setUserId(id);
             user1.setCreatedAt(user.getCreatedAt());
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
@@ -82,6 +80,42 @@ public class UserRepository {
         }
     }
 
+    public User findByEmail(String email) {
+        try(Connection connection = dataSource.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users WHERE email = (?)");
+            stmt.setString(1, email);
+            ResultSet resultSet = stmt.executeQuery();
+            if(resultSet.next()) {
+                User user = new User(resultSet.getString("user_name"),resultSet.getString("email"), resultSet.getString("password"), resultSet.getString("role"));
+                user.setUserId(resultSet.getInt("user_id"));
+                return user;
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQL error: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public User findByUsername(String username) {
+        try(Connection connection = dataSource.getConnection()) {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users WHERE user_name = (?)");
+            stmt.setString(1, username);
+            ResultSet resultSet = stmt.executeQuery();
+            if(resultSet.next()) {
+                User user = new User(resultSet.getString("user_name"),resultSet.getString("email"), resultSet.getString("password"), resultSet.getString("role"));
+                user.setUserId(resultSet.getInt("user_id"));
+                return user;
+            }
+            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQL error: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
     public User getUserById(int id) {
         try(Connection connection = dataSource.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM users WHERE user_id = (?)");
@@ -89,7 +123,7 @@ public class UserRepository {
             ResultSet resultSet = stmt.executeQuery();
             if(resultSet.next()) {
                 User user = new User(resultSet.getString("user_name"),resultSet.getString("email"), resultSet.getString("password"), resultSet.getString("role"));
-                user.setUserID(resultSet.getInt("user_id"));
+                user.setUserId(resultSet.getInt("user_id"));
                 return user;
             }
             return null;
