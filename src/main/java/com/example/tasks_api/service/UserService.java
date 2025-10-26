@@ -22,10 +22,10 @@ public class UserService {
             throw new IllegalStateException("User already exists");
         }
 
-        String hashedPassword = passwordEncoder.encode(user.getPasswordHash());
-        user.setPasswordHash(hashedPassword);
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
 
-        if(user.getRole().isEmpty() || user.getRole() == null) {
+        if( user.getRole() == null || user.getRole().isEmpty()) {
             user.setRole("USER");
         }
 
@@ -39,7 +39,7 @@ public class UserService {
             return false;
         }
 
-        return passwordEncoder.matches(password, user.getPasswordHash());
+        return passwordEncoder.matches(password, user.getPassword());
     }
 
     public List<User> findAll() { return userRepository.getUserList();}

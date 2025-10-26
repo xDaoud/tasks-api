@@ -7,14 +7,14 @@ public class User {
     private String username;
     private String email;
     private LocalDateTime createdAt;
-    private String passwordHash;
+    private String password;
     private String role = "USER";
 
-    public User(String username, String email, String passwordHash, String role) {
+    public User(String username, String email, String password, String role) {
         this.createdAt = LocalDateTime.now();
         this.email = email;
         this.username = username;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.role = role;
     }
 
@@ -50,16 +50,16 @@ public class User {
         this.username = username;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setRole(String role) {
         this.role = role;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
     public String getRole() {
         return role;

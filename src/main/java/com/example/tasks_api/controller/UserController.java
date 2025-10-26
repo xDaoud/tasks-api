@@ -22,11 +22,11 @@ public class UserController {
     @GetMapping("/notnow")
     public List<User> getUsers() {return userService.findAll();}
 
-    @PostMapping("/users")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        User addedUser = userService.addUser(user);
-        return new ResponseEntity<>(addedUser, HttpStatus.CREATED);
-    }
+//    @PostMapping("/users")
+//    public ResponseEntity<User> addUser(@RequestBody User user) {
+//        User addedUser = userService.addUser(user);
+//        return new ResponseEntity<>(addedUser, HttpStatus.CREATED);
+//    }
 
     @PutMapping("/user/{id}")
     public  String updateUser(User user,@PathVariable int id) {

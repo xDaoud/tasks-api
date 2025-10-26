@@ -1,8 +1,6 @@
 package com.example.tasks_api.repository;
 
 import com.example.tasks_api.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -26,10 +24,10 @@ public class UserRepository {
         try(Connection connection = dataSource.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO users(user_name, email, password) VALUES(?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
 
-            User user1 = new User(user.getUsername(), user.getEmail(), user.getPasswordHash(), user.getRole());
+            User user1 = new User(user.getUsername(), user.getEmail(), user.getPassword(), user.getRole());
             stmt.setString(1, user1.getUsername());
             stmt.setString(2, user1.getEmail());
-            stmt.setString(3, user1.getPasswordHash());
+            stmt.setString(3, user1.getPassword());
             stmt.executeUpdate();
             ResultSet generatedKeys = stmt.getGeneratedKeys();
             while(generatedKeys.next()) {
@@ -48,7 +46,7 @@ public class UserRepository {
     public User updateUser(int id,User user) {
         try(Connection connection = dataSource.getConnection()) {
             PreparedStatement stmt = connection.prepareStatement("UPDATE users SET user_name = (?) , email = (?) WHERE user_id = (?);");
-            User user1 = new User(user.getUsername(), user.getEmail(), user.getPasswordHash(), user.getRole());
+            User user1 = new User(user.getUsername(), user.getEmail(), user.getPassword(), user.getRole());
             user1.setUserId(id);
             user1.setCreatedAt(user.getCreatedAt());
             stmt.setString(1, user.getUsername());

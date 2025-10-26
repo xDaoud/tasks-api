@@ -25,6 +25,7 @@ public class AuthController {
             userService.registerUser(user);
             return ResponseEntity.ok("success");
         } catch (Exception e) {
+            e.printStackTrace();
             return  ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -32,7 +33,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         try {
-            Boolean success = userService.loginUser(loginRequest.getUsername(), loginRequest.getHashedPassowrd());
+            boolean success = userService.loginUser(loginRequest.getUsername(), loginRequest.getHashedPassowrd());
             if (success) {
                 return ResponseEntity.ok("success");
             } else {
