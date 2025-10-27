@@ -19,14 +19,18 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping("/tasks")
+    @GetMapping("/notyet")
     public List<Task> tasks() {
         return taskService.getTaskList();
     }
 
-    @PostMapping("/user/{userId}")
-    public ResponseEntity<Task> addTask(@PathVariable int userId, @RequestBody Task task) {
+    @PostMapping("/tasks")
+    public ResponseEntity<Task> addTask(@RequestBody Task task) {
+        System.out.println("user id" + task.getUserId());
+        task.setUserId(2);
+        System.out.println("user id2" + task.getUserId());
         Task task1 = this.taskService.addTask(task);
+        System.out.println("user id3" + task1.getUserId());
         return new ResponseEntity<>(task1, HttpStatus.CREATED);
     }
 

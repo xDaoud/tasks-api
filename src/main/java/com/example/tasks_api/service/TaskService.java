@@ -25,9 +25,9 @@ public class TaskService {
     }
 
     public Task addTask(Task task) {
-        if(userRepository.getUserById(task.getUserId()) == null) {
-            throw new IllegalArgumentException("this is not a registered user");
-        }
+        //if(userRepository.getUserById(task.getUserId()) == null) {
+            //throw new IllegalArgumentException("this is not a registered user");
+        //}
         return taskRepository.addTask(task);
     }
 

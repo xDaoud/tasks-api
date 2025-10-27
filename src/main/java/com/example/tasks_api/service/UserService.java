@@ -56,4 +56,8 @@ public class UserService {
         return userRepository.deleteUser(id);
     }
 
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
 }

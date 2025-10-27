@@ -35,6 +35,7 @@ public class TaskRepository {
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO tasks(task_name, is_completed, user_id) VALUES (?,?,?)");
             Task task1 = new Task(task.getTaskName());
             task1.setCompleted(task.getCompleted());
+            task1.setUserId(task.getUserId());
             stmt.setString(1, task1.getTaskName());
             stmt.setBoolean(2, task1.getCompleted());
             stmt.setInt(3, task1.getUserId());
