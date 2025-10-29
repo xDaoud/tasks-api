@@ -28,8 +28,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     System.out.println("security authorize");
                     auth
-                            .requestMatchers("/auth/**", "/error", "/tasks").permitAll()
-                            .anyRequest().authenticated();  // Protect everything else
+                            .requestMatchers("/auth/**", "/error").permitAll()
+                            .requestMatchers("/api/**").authenticated()
+                            .anyRequest().authenticated();
                 })
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable);
