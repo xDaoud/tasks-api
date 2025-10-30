@@ -40,16 +40,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         try {
-            System.out.println("is it even in???");
             boolean success = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
             if (success) {
-                System.out.println("Checking credentials");
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getUsername());
-                System.out.println("userDetails = " + userDetails);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                System.out.println(authenticationToken + ": authenticationToken = " + authenticationToken.getDetails());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                System.out.println("userDetails2 = " + userDetails);
                 return ResponseEntity.ok("success, session created");
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized, wrong username or password");
