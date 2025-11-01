@@ -1,6 +1,6 @@
-package com.example.tasks_api.service;
+package com.xDaoud.tasks_api.service;
 
-import com.example.tasks_api.model.User;
+import com.xDaoud.tasks_api.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +16,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.example.tasks_api.model.User user = userService.findByUsername(username);
+        User user = userService.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("Username not found: " + username);
         }

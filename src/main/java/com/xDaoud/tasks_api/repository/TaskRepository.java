@@ -1,7 +1,6 @@
-package com.example.tasks_api.repository;
+package com.xDaoud.tasks_api.repository;
 
-import com.example.tasks_api.model.Task;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.xDaoud.tasks_api.model.Task;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;

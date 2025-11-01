@@ -1,4 +1,4 @@
-package com.example.tasks_api.model;
+package com.xDaoud.tasks_api.model;
 
 public class Task {
     private int id;

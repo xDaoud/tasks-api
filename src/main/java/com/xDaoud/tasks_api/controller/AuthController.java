@@ -1,15 +1,14 @@
-package com.example.tasks_api.controller;
+package com.xDaoud.tasks_api.controller;
 
-import com.example.tasks_api.model.LoginRequest;
-import com.example.tasks_api.model.User;
-import com.example.tasks_api.service.CustomUserDetailsService;
-import com.example.tasks_api.service.UserService;
+import com.xDaoud.tasks_api.model.LoginRequest;
+import com.xDaoud.tasks_api.model.User;
+import com.xDaoud.tasks_api.service.CustomUserDetailsService;
+import com.xDaoud.tasks_api.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

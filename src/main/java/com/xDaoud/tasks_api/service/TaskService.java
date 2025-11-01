@@ -1,7 +1,7 @@
-package com.example.tasks_api.service;
+package com.xDaoud.tasks_api.service;
 
-import com.example.tasks_api.model.Task;
-import com.example.tasks_api.repository.TaskRepository;
+import com.xDaoud.tasks_api.model.Task;
+import com.xDaoud.tasks_api.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

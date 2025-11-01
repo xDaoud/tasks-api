@@ -1,4 +1,4 @@
-package com.example.tasks_api;
+package com.xDaoud.tasks_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,7 +1,7 @@
-package com.example.tasks_api.service;
+package com.xDaoud.tasks_api.service;
 
-import com.example.tasks_api.model.User;
-import com.example.tasks_api.repository.UserRepository;
+import com.xDaoud.tasks_api.model.User;
+import com.xDaoud.tasks_api.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
