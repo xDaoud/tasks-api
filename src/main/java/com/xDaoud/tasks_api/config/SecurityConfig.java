@@ -23,10 +23,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        System.out.println("security filter chain");
         http
                 .authorizeHttpRequests(auth -> {
-                    System.out.println("security authorize");
                     auth
                             .requestMatchers("/auth/**", "/error").permitAll()
                             .requestMatchers("/api/**").authenticated()
@@ -35,7 +33,6 @@ public class SecurityConfig {
                 })
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable);
-        System.out.println("security filter chain2");
         return http.build();
     }
 }
