@@ -1,4 +1,3 @@
-**SIMPLER README.md:**
 
 ```markdown
 # Task Manager API
